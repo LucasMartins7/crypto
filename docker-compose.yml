@@ -1,0 +1,46 @@
+version: '3.8'
+
+services:
+  crypto-trading-api:
+    build: .
+    ports:
+      - "8080:8080"
+    environment:
+      - SPRING_PROFILES_ACTIVE=docker
+      - SPRING_DATASOURCE_URL=jdbc:h2:mem:cryptodb
+      - SPRING_DATASOURCE_DRIVER_CLASS_NAME=org.h2.Driver
+      - SPRING_DATASOURCE_USERNAME=sa
+      - SPRING_DATASOURCE_PASSWORD=
+      - SPRING_JPA_DATABASE_PLATFORM=org.hibernate.dialect.H2Dialect
+      - SPRING_H2_CONSOLE_ENABLED=true
+      - APP_SECURITY_JWT_SECRET=mySecretKey1234567890abcdefghijklmnopqrstuvwxyz
+      - APP_SECURITY_JWT_EXPIRATION=86400000
+      - APP_SECURITY_ENCRYPTION_KEY=myEncryptionKey123456
+      - APP_EXCHANGES_SANDBOX_MODE=true
+      - APP_TRADING_LIMITS_MAX_ORDER_SIZE=1000.00
+      - APP_TRADING_LIMITS_DAILY_VOLUME=10000.00
+    volumes:
+      - ./logs:/app/logs
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8080/actuator/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+
+  # Optional: Add a database service for production-like testing
+  postgres:
+    image: postgres:13-alpine
+    environment:
+      - POSTGRES_DB=cryptodb
+      - POSTGRES_USER=cryptouser
+      - POSTGRES_PASSWORD=cryptopass
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    restart: unless-stopped
+
+volumes:
+  postgres_data:

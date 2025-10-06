@@ -1,0 +1,32 @@
+services:
+  - type: web
+    name: crypto-trading-api
+    env: java
+    buildCommand: mvn clean package -DskipTests
+    startCommand: java -Djava.security.egd=file:/dev/./urandom -jar target/crypto-trading-api-1.0-SNAPSHOT.jar
+    healthCheckPath: /actuator/health
+    envVars:
+      - key: SPRING_PROFILES_ACTIVE
+        value: production
+      - key: SPRING_DATASOURCE_URL
+        value: jdbc:h2:mem:cryptodb
+      - key: SPRING_DATASOURCE_DRIVER_CLASS_NAME
+        value: org.h2.Driver
+      - key: SPRING_DATASOURCE_USERNAME
+        value: sa
+      - key: SPRING_DATASOURCE_PASSWORD
+        value: ""
+      - key: SPRING_JPA_DATABASE_PLATFORM
+        value: org.hibernate.dialect.H2Dialect
+      - key: APP_SECURITY_JWT_SECRET
+        generateValue: true
+      - key: APP_SECURITY_JWT_EXPIRATION
+        value: "86400000"
+      - key: APP_SECURITY_ENCRYPTION_KEY
+        generateValue: true
+      - key: APP_EXCHANGES_SANDBOX_MODE
+        value: "true"
+      - key: APP_TRADING_LIMITS_MAX_ORDER_SIZE
+        value: "1000.00"
+      - key: APP_TRADING_LIMITS_DAILY_VOLUME
+        value: "10000.00"
