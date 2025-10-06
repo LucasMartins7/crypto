@@ -47,6 +47,10 @@ management:
   endpoint:
     health:
       show-details: when-authorized
+  metrics:
+    system:
+      processor:
+        enabled: false
 
 app:
   security:
