@@ -56,7 +56,7 @@ management:
   endpoints:
     web:
       exposure:
-        include: health,info,metrics,prometheus
+        include: "health,info,metrics,prometheus,httptrace,env,beans,conditions,configprops,heapdump,threaddump"
   endpoint:
     health:
       show-details: always
