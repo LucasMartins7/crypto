@@ -5,7 +5,8 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.scheduling.annotation.EnableAsync;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 
-@SpringBootApplication
+@SpringBootApplication(exclude = org.springframework.boot.actuate.autoconfigure.metrics.SystemMetricsAutoConfiguration.class)
+
 @EnableAsync
 @EnableTransactionManagement
 public class CryptoTradingApiApplication {
